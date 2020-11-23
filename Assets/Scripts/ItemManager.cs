@@ -18,7 +18,7 @@ public class ItemManager : MonoBehaviour
         {
             Debug.Log(item);
             Slot slot = Instantiate(slotPrefab, Vector3.zero, Quaternion.identity, slotHolder);
-            slot.Initialize(item, () => placement.GetPrefab(item));
+            slot.Initialize(item, () => placement.SetItemToSpawn(item));
         }
     }
 }

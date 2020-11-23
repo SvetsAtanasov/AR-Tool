@@ -137,7 +137,11 @@ public class ManipulateObj : MonoBehaviour
 
             if (touch.phase == TouchPhase.Moved)
             {
-                selectedObject.transform.position = new Vector3(selectedObject.transform.position.x + touch.deltaPosition.x * 0.05f * Time.deltaTime, selectedObject.transform.position.y, selectedObject.transform.position.z + touch.deltaPosition.y * 0.05f * Time.deltaTime);
+                selectedObject.transform.localPosition = new Vector3(
+                    selectedObject.transform.localPosition.x + touch.deltaPosition.x * 0.05f * Time.deltaTime, 
+                    selectedObject.transform.localPosition.y, 
+                    selectedObject.transform.localPosition.z + touch.deltaPosition.y * 0.05f * Time.deltaTime
+                );
             }
         }
     }
@@ -190,12 +194,12 @@ public class ManipulateObj : MonoBehaviour
 
                     if (LR.z > 0f)
                     {
-                        selectedObject.transform.rotation = Quaternion.Euler(0f, 0f - angleOffset, 0f);
+                        selectedObject.transform.localRotation = Quaternion.Euler(0f, 0f - angleOffset, 0f);
                     }
 
                     else if (LR.z < 0f)
                     {
-                        selectedObject.transform.rotation = Quaternion.Euler(0f, 0f + angleOffset, 0f);
+                        selectedObject.transform.localRotation = Quaternion.Euler(0f, 0f + angleOffset, 0f);
                     }
                 }
             }

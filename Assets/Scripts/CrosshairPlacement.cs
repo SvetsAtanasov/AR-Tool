@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public class CrosshairPlacement : MonoBehaviour
 {
     public GameObject pointerObj;
-    public GameObject placedObject;
 
     public Text refpointCount;
 
@@ -21,6 +20,10 @@ public class CrosshairPlacement : MonoBehaviour
     [SerializeField] private List<ARReferencePoint> referencePoints = new List<ARReferencePoint>();
     [SerializeField] private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+    [SerializeField] private List<GameObject> spawnedItems = new List<GameObject>();
+    private GameObject itemSpawnPrefab = null;
+
+    //[SerializeField] private bool clicked = false;
     void Start()
     {
         raymanager = FindObjectOfType<ARRaycastManager>();
@@ -30,10 +33,10 @@ public class CrosshairPlacement : MonoBehaviour
 
     private void Update()
     {
-        PlaceObject();
+        UpdateInput();
     }
 
-    public void PlaceObject()
+    public void UpdateInput()
     {
         if (hits.Count > 0)
         {
@@ -50,23 +53,35 @@ public class CrosshairPlacement : MonoBehaviour
             {
                 ARReferencePoint referencePoint = referencePointManager.AddReferencePoint(pose);
 
-                if (referencePoint == null)
-                {
-                    Debug.Log("Something Went Wrong");
-                }
-
-                else if (referencePointManager.referencePointPrefab != null)
-                {
-                    Instantiate(placedObject, pose.position, Quaternion.identity);
+                if (referencePoint != null && itemSpawnPrefab != null) {
                     referencePoints.Add(referencePoint);
                     refpointCount.text = $"Referencepoint Count: {referencePoints.Count}";
+
+                    // Spawn the item as a child of the new reference point (at the same position)
+                    GameObject spawnedItem = Instantiate(itemSpawnPrefab, referencePoint.transform);
+                    spawnedItem.transform.localPosition = Vector3.zero;
+                    spawnedItem.transform.localRotation = Quaternion.identity;
+                    spawnedItem.transform.localScale = Vector3.one;
+
+                    spawnedItems.Add(spawnedItem);
+
+                    // Disable spawning more than 1 item, can be removed to add infinite spawns
+                    itemSpawnPrefab = null;
                 }
+
+                //if (clicked)
+                //{
+                //    referencePointManager.RemoveReferencePoint(referencePoint);
+                //    referencePoints.Remove(referencePoint);
+                //    referencePointManager.referencePointPrefab.transform.position = pose.position;
+                //    referencePointManager.referencePointPrefab.transform.rotation = pose.rotation;
+                //}
             }
         }
     }
 
-    public void GetPrefab(ItemData itemData)
+    public void SetItemToSpawn(ItemData itemData)
     {
-        placedObject = itemData.itemPrefab;
+        itemSpawnPrefab = itemData.itemPrefab;
     }
 }
