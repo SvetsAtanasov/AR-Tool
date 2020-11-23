@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class CrosshairPlacement : MonoBehaviour
 {
     public GameObject pointerObj;
+    public GameObject placedObject;
 
     public Text refpointCount;
 
@@ -20,7 +21,6 @@ public class CrosshairPlacement : MonoBehaviour
     [SerializeField] private List<ARReferencePoint> referencePoints = new List<ARReferencePoint>();
     [SerializeField] private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-    //[SerializeField] private bool clicked = false;
     void Start()
     {
         raymanager = FindObjectOfType<ARRaycastManager>();
@@ -57,23 +57,16 @@ public class CrosshairPlacement : MonoBehaviour
 
                 else if (referencePointManager.referencePointPrefab != null)
                 {
+                    Instantiate(placedObject, pose.position, Quaternion.identity);
                     referencePoints.Add(referencePoint);
                     refpointCount.text = $"Referencepoint Count: {referencePoints.Count}";
                 }
-
-                //if (clicked)
-                //{
-                //    referencePointManager.RemoveReferencePoint(referencePoint);
-                //    referencePoints.Remove(referencePoint);
-                //    referencePointManager.referencePointPrefab.transform.position = pose.position;
-                //    referencePointManager.referencePointPrefab.transform.rotation = pose.rotation;
-                //}
             }
         }
     }
 
     public void GetPrefab(ItemData itemData)
     {
-        referencePointManager.referencePointPrefab = itemData.itemPrefab;
+        placedObject = itemData.itemPrefab;
     }
 }
