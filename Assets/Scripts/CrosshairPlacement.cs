@@ -12,8 +12,6 @@ public class CrosshairPlacement : MonoBehaviour
 
     public Text refpointCount;
 
-    private ManipulateObj manipulate;
-
     [SerializeField] private ARRaycastManager raymanager;
     [SerializeField] private ARReferencePointManager referencePointManager;
 
@@ -23,12 +21,10 @@ public class CrosshairPlacement : MonoBehaviour
     [SerializeField] private List<GameObject> spawnedItems = new List<GameObject>();
     private GameObject itemSpawnPrefab = null;
 
-    //[SerializeField] private bool clicked = false;
     void Start()
     {
         raymanager = FindObjectOfType<ARRaycastManager>();
         referencePointManager = FindObjectOfType<ARReferencePointManager>();
-        manipulate = FindObjectOfType<ManipulateObj>();
     }
 
     private void Update()
@@ -68,14 +64,6 @@ public class CrosshairPlacement : MonoBehaviour
                     // Disable spawning more than 1 item, can be removed to add infinite spawns
                     itemSpawnPrefab = null;
                 }
-
-                //if (clicked)
-                //{
-                //    referencePointManager.RemoveReferencePoint(referencePoint);
-                //    referencePoints.Remove(referencePoint);
-                //    referencePointManager.referencePointPrefab.transform.position = pose.position;
-                //    referencePointManager.referencePointPrefab.transform.rotation = pose.rotation;
-                //}
             }
         }
     }

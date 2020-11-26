@@ -22,7 +22,7 @@ public class ManipulateObj : MonoBehaviour
     [SerializeField] private bool btnMoveClicked = false;
     [SerializeField] private bool btnScaleClicked = false;
     [SerializeField] private bool btnRotateClicked = false;
-    [SerializeField] private bool btnDeleteClicked = false;
+    //[SerializeField] private bool btnDeleteClicked = false;
 
     void Start()
     {
@@ -88,17 +88,16 @@ public class ManipulateObj : MonoBehaviour
         }
     }
 
-    public void DeleteBtnIsClicked()
-    {
-        btnDeleteClicked = true;
-    }
+    //public void DeleteBtnIsClicked()
+    //{
+    //    btnDeleteClicked = true;
+    //}
 
     public void SelectObject()
     {
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
-            //Debug.Log(Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 5f)));
 
             if (touch.phase == TouchPhase.Began)
             {

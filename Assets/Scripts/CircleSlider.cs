@@ -6,54 +6,49 @@ using UnityEngine.EventSystems;
 
 public class CircleSlider : MonoBehaviour
 {
-    //public EventTrigger eventTrigger;
-    //public GameObject handle;
-    //public Image slider;
-
     public Image colorPreview;
     public Image colorWheel;
+
+    [SerializeField] private ManipulateObj manipulateObj;
 
     private Color color;
     private void Start()
     {
-        //eventTrigger = GetComponentInChildren<EventTrigger>();
+        manipulateObj = FindObjectOfType<ManipulateObj>();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount == 1)
         {
-            Texture2D tex = colorWheel.sprite.texture;
+            Touch touch = Input.GetTouch(0);
 
-            Rect r = colorWheel.rectTransform.rect;
-            Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(colorWheel.rectTransform, Input.mousePosition, null, out localPoint);
+            if (touch.phase == TouchPhase.Moved)
+            {
+                if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                {
+                    Texture2D tex = colorWheel.sprite.texture;
 
-            int px = Mathf.Clamp(0, (int)(((localPoint.x - r.x) * tex.width) / r.width), tex.width);
-            int py = Mathf.Clamp(0, (int)(((localPoint.y - r.y) * tex.height) / r.height), tex.height);
+                    Rect r = colorWheel.rectTransform.rect;
+                    Vector2 localPoint;
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(colorWheel.rectTransform, touch.position, null, out localPoint);
 
-            Color col = tex.GetPixel(px, py);
+                    int px = Mathf.Clamp(0, (int)(((localPoint.x - r.x) * tex.width) / r.width), tex.width);
+                    int py = Mathf.Clamp(0, (int)(((localPoint.y - r.y) * tex.height) / r.height), tex.height);
 
-            color = new Color(col.r, col.g, col.b);
-            colorPreview.color = color;
-            Debug.Log(col);
+                    Color col = tex.GetPixel(px, py);
+
+                    color = new Color(col.r, col.g, col.b);
+                    colorPreview.color = color;
+                    Debug.Log(col);
+                }
+
+                else
+                {
+                    return;
+                }
+            }
+            manipulateObj.selectedObject.gameObject.GetComponent<MeshRenderer>().material.color = colorPreview.color;
         }
     }
-
-    //public void OnHandleDrag()
-    //{
-    //    Screen.sleepTimeout = SleepTimeout.NeverSleep;
-    //    mousePos = Input.mousePosition;
-
-    //    Vector2 dir = mousePos - handle.position;
-    //    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-    //    Debug.Log(angle);
-    //    Quaternion r = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
-
-    //    float amount = ((360 - (angle + 90f)) % 360) / 360;
-
-    //    handle.rotation = r;
-    //    slider.fillAmount = amount;
-    //}
 }
